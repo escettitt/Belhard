@@ -1,0 +1,25 @@
+.input {
+    &__post {
+        border: none;
+        margin: 10px 0;
+        width: 100%;
+        &::placeholder {
+            font-style: italic;
+        }
+    }
+    &_header {
+        font-size: 2rem;
+    }
+    &_description {
+        font-size: 1.5rem;
+    }
+}
+
+#post_description {
+    padding-bottom: 30px;
+}
+
+*:focus,
+ :active {
+    outline: none;
+}
