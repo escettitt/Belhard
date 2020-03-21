@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card__image">
-            <img src="1573570238831.png" alt="">
+            <img src="/storage.1573570238831.png" alt="">
         </div>
         <div class="card__category">
             Рубрики
@@ -14,7 +14,7 @@
     @foreach ($posts as $post)
     <div class="card" onclick="location.href='/posts/{{$post->id}}';">
     <div class="card__image">
-    <img src="{{ asset('storage/'.$post->cover) }}" alt="">
+    <img src="storage/{{$post->cover}}" alt="">
         </div>
         <!-- <div class="card__category">
             Рубрики
