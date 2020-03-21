@@ -18,7 +18,7 @@ class CreateNewsTable extends Migration
             $table->string('header');
             $table->string('description');
             $table->string('cover');
-            $table->string('body');
+            $table->longText('body');
             $table->timestamps();
         });
     }
