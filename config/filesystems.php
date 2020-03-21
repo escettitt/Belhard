@@ -50,8 +50,8 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => public_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'root' => storage_path('app/public'),
+            'url' => 'https://desolate-waters-59345.herokuapp.com'.'/storage',
             'visibility' => 'public',
         ],
 
