@@ -25,8 +25,11 @@ var toolbarOptions = [
         'header': [1, 2, 3, 4, false]
     }],
     ['bold', 'italic', 'underline', 'strike'],
+    [{
+        'size': ['small', false, 'large', 'huge']
+    }],
     ['link', 'image'],
-    ['blockquote', 'code-block'],
+    ['blockquote'],
     [{
         'list': 'ordered'
     }, {
@@ -63,41 +66,62 @@ $('#submit').click(function(e) {
     var token = $('#token')
     var header = $('#header')
     var description = $('#description')
+    var body = document.getElementsByClassName('ql-editor')[0].innerHTML
     var allImages = document.getElementsByTagName('img');
-    var formData = new FormData()
-    formData.append('post_header', header.val())
-    formData.append('post_description', description.val())
-    formData.append('_token', token.val())
-    for (let i = 0; i < allImages.length; i++) {
-        var image = allImages[i].src
-        var ext = image.substring("data:image/".length, image.indexOf(";base64"))
-        var filename = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2,
-        15) + '.' + ext;
-        formData.append('post_images[]', JSON.stringify({name: filename, data: image}))
-        allImages[i].src = '/storage/'+filename
-        if(i == 0){
-            allImages[0].remove()
+    if ((header.val().length > 0) && (description.val().length > 0) && (body.length > 0)) {
+        var formData = new FormData()
+        formData.append('post_header', header.val())
+        formData.append('post_description', description.val())
+        formData.append('_token', token.val())
+        for (let i = 0; i < allImages.length; i++) {
+            var image = allImages[i].src
+            var ext = image.substring("data:image/".length, image.indexOf(";base64"))
+            var filename = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2,
+                15) + '.' + ext;
+            formData.append('post_images[]', JSON.stringify({
+                name: filename,
+                data: image
+            }))
+            allImages[i].src = '/images/' + filename
+            if (i == 0) {
+                allImages[0].remove()
+            }
+        }
+
+        formData.append('post_body', body)
+        $.ajax({
+            url: form.attr('action'),
+            data: formData,
+            type: 'post',
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                document.location.href = "/";
+            },
+            error: function(xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                alert(err.Message);
+            },
+            headers: {
+                'X-CSRF-TOKEN': token.val()
+            }
+        })
+    }
+    else{
+        if(header.val().length === 0){
+            alert('Пустой заголовок')
+        }
+        else if(description.val().length === 0){
+            alert('Пустое описание')
+        }
+        else if(body.length === 0){
+            alert('Пустое описание')
         }
     }
-    var body = document.getElementsByClassName('ql-editor')[0].innerHTML
-    formData.append('post_body', body)
-    $.ajax({
-        url: form.attr('action'),
-        data: formData,
-        type: 'post',
-        processData: false,
-        contentType: false,
-        success: function(data) {
-            console.log(data)
-        },
-        headers: {
-            'X-CSRF-TOKEN': token.val()
-        }
-    })
 });
 </script>
 <script>
-    function dataURLtoFile(dataurl, ext) {
+function dataURLtoFile(dataurl, ext) {
     var filename = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     var arr = dataurl.split(','),
         mime = arr[0].match(/:(.*?);/)[1],
@@ -118,7 +142,8 @@ $('#submit').click(function(e) {
 .ql-container {
     height: 50vh;
 }
-.ql-toolbar{
+
+.ql-toolbar {
     margin-top: 1rem !important;
 }
 </style>

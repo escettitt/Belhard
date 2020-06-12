@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    // $posts = DB::table('news')->get();
-    $posts = App\News::all();
+    $posts = DB::table('news')->latest()->get();
+    // $posts = App\News::all();
     return view('main', compact('posts'));
 });
 Route::get('/posts/{post}', function ($id) {
@@ -26,6 +26,7 @@ Route::get('/edit/{post}', function ($id) {
     $post = DB::table('news')->find($id);
     return view('edit', compact('post'));
 })->middleware('auth');
+Route::get('/delete/{post}', 'NewsController@delete')->middleware('auth');
 Route::post('/edit','NewsController@update');
 Route::get('/editor', function () {
     return view('editor');

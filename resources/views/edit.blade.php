@@ -27,7 +27,7 @@ var toolbarOptions = [
     }],
     ['bold', 'italic', 'underline', 'strike'],
     ['link', 'image'],
-    ['blockquote', 'code-block'],
+    ['blockquote'],
     [{
         'list': 'ordered'
     }, {
